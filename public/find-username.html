@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>아이디 찾기</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <form id="findUsernameForm">
+        <h1>아이디 찾기</h1>
+        <input type="text" id="name" name="name" placeholder="이름" required>
+        <input type="email" id="email" name="email" placeholder="이메일" required>
+        <button type="submit">아이디 찾기</button>
+    </form>
+    <p id="usernameResult"></p> 
+
+    <script>
+        document.getElementById('findUsernameForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+
+            const response = await fetch('/find-username', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name, email })
+            });
+
+            const result = await response.json();
+            const usernameResult = document.getElementById('usernameResult');
+
+            if (response.ok) {
+                usernameResult.textContent = '아이디: ' + result.username;
+                usernameResult.style.color = 'green';
+            } else {
+                usernameResult.textContent = result.error || '아이디 찾기 실패';
+                usernameResult.style.color = 'red';
+            }
+        });
+    </script>
+</body>
+</html>

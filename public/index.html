@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <form id="loginForm">
+        <h1>로그인</h1>
+        <input type="text" id="username" name="username" placeholder="아이디" required>
+        <input type="password" id="password" name="password" placeholder="비밀번호" required>
+        <button type="submit">로그인</button>
+        <button type="button" id="registerButton">회원가입</button>
+        <button type="button" id="findUsernameButton">아이디 찾기</button>
+        <button type="button" id="findPasswordButton">비밀번호 찾기</button>
+    </form>
+
+    <script>
+        document.getElementById('registerButton').addEventListener('click', () => {
+            window.location.href = '/register.html';
+        });
+
+        document.getElementById('findUsernameButton').addEventListener('click', () => {
+            window.location.href = '/find-username.html';
+        });
+
+        document.getElementById('findPasswordButton').addEventListener('click', () => {
+            window.location.href = '/find-password.html';
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                alert('로그인 성공');
+            } else {
+                alert(result.error || '로그인 실패');
+            }
+        });
+    </script>
+</body>
+</html>
